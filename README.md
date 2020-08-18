@@ -6,7 +6,7 @@ Each timeblock is color-coded to indicate whether it is in the past, present, or
 
 You can enter an 'Event/Activities' in each timeslot and clicked save to save the event. 
 
-![myimage-alt-tag](https://github.com/sxiong6901/dayPlanner/blob/master/Assets/Capture.PNG?raw=true)
+![myimage-alt-tag](https://github.com/sxiong6901/dayPlanner/blob/master/Capture.PNG?raw=true)
 
 https://sxiong6901.github.io/dayPlanner
 
