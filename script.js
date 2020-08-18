@@ -12,7 +12,7 @@ function updatetime() {
   for(var i = 0; i < timeOfday.length; i++) {
 
     if (parseInt(timeOfday[i]) > currentTime) {
-      $("#" + timeOfday[i]).attr("style", "background-color: salmon");
+      $("#" + timeOfday[i]).attr("style", "background-color: lightgreen");
       
     }
     else if (parseInt(timeOfday[i]) < currentTime) {
