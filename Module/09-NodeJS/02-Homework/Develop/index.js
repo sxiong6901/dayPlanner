@@ -1,67 +1,46 @@
-  
-// External packages
-const inquirer = require('inquirer');
+const inquirer = require("inquirer");
+const util = require("util");
 const fs = require('fs');
-const util = require('util');
-
-// Internal modules
-const api = require('./utils/api.js');
-const generateMarkdown = require('./utils/generateMarkdown.js');
-    
-inquirer
-    .prompt([
+const api = require('./utils/api.js')
+const writeReadme = util.promisify(fs.writeFile);
+async function promptUser(){
+    return inquirer.prompt([
         {
             type: "input",
-            message: "What is your GitHub user name?",
             name: "username",
-            validate: function (answer) {
-                if (answer.length < 1) {
-                    return console.log("Please enter Github username (Note: You do not have to add '@'.");
-                }
-                return true;
-            }
+            message: "What is your GitHub user name?"
         },
         {
             type: "input",
-            message: "What is your Project Title?",
             name: "title",
-            validate: function (answer) {
-                if (answer.length < 1) {
-                    return console.log("Please enter A Project Title.");
-                }
-                return true;
-            }
+            message: "What is your Project Title?"
         },
         {
             type: "input",
             message: "Provide detail description",
-            name: "desc",
-            validate: function (answer) {
-                if (answer.length < 1) {
-                    return console.log("Enter A Detail Description");
-                }
-                return true;
-            }
+            name: "desc"
         },
         {
             type: "input",
             message: "Provide a step-by-step description of how to get the development environment running.",
-            name: "install"
+            name: "install",
+            default: "User is prompt to answer questions. once the questionnaire is completed, a readme file will be generated"
         },
         {
             type: "input",
             message: "Provide instructions for use.",
-            name: "usage"
+            name: "usage",
+            default: "The application itself can be invoked with node index.js."
         },
         {
             type: 'list',
             message: "Choose a license for your project.",
             choices: ['GNU AGPLv3', 'GNU GPLv3', 'GNU LGPLv3', 'Mozilla Public License 2.0', 'Apache License 2.0', 'MIT License', 'Boost Software License 1.0', 'Unlicense'],
-            name: "licenseName"
+            name: "licenseName",
         },
         {
             type: "input",
-            message: "provide License url ",
+            message: "Provide License url. ",
             name: "licenseUrl"
         },
         {
@@ -73,26 +52,54 @@ inquirer
             type: "input",
             message: "Provide examples on how to run tests.",
             name: "test"
-        }
-        ]);
+        },
+    ]);
+    }
+function generateMd(answer) {
+    return `
+  # Title : ${answer.title}
+  ## Description:
+  ${answer.desc}
+  ## Table of Contents
+  * [Title](#Title)
+  * [Description](#Description)
+  * [Installation](#Installation)
+  * [Usage](#Usage)
+  * [License](#license)
+  * [Contributors](#Contributors)
+  * [Tests](#Test)
+  * [Questions](#Questions)
+  
+  ## Installation
+  ${answer.install}
 
-        function init() {
-            inquirer.prompt(questions).then(answers => {
-              console.log(answers);
-              axios
-                .get("https://api.github.com/users/" + answers.username)
-                .then(response => {
-                  console.log(response);
-                  var imageURL = response.data.avatar_url;
-                  answers.image = imageURL;
-                  console.log(imageURL);
-                  fs.writeFile("README.md", generateMarkdown(answers), function(err) {
-                    if (err) {
-                      throw err;
-                    }
-                  });
-                });
-            });
-          }
-          
-          init();
+  ## Usage
+  ${answer.usage}
+
+  ## License
+  ${answer.licenseName} - URL ${answer.licenseUrl}
+  
+  ## Contributors
+  https://github.com/+ ${answer.contributors}
+  
+  ## Test
+  ${answer.test}
+  
+  ## Questions
+  If you have any questions, contact ${answer.username} on GitHub.`
+  }
+// fs.writeFile('README.md', generateMarkdown, function (err) {
+//     if (err) throw err;
+//     console.log('File is created successfully.');
+//   });
+promptUser()
+.then(function(answer) {
+    const md = generateMd(answer);
+    return writeReadme("README.md", md);
+  })
+  .then(function() {
+    console.log("Successfully wrote to README.md");
+  })
+  .catch(function(err) {
+    console.log(err);
+  });

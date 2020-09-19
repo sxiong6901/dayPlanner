@@ -1,10 +1,47 @@
-function generateMarkdown(data) {
+console.log(`starting`);
+        console.log(userResponse);
+        const gitUsername = userResponse.username;
+        const projectTittle = userResponse.projectTittle;
+        const projectDescription = userResponse.projectDescription;
+        const installationProcess = userResponse.installationProcess;
+        const instruction = userResponse.instruction;
+        const instructionExample = userResponse.instructionExample;
+        const licenseName = userResponse.licenseName;
+        const licenseUrl = userResponse.licenseUrl;
+        const contributorUserNames = userResponse.contributorsGitUserName;
+        const tests = userResponse.tests;
+            // fetching data from git
+            // user
+        const gitResponse = await axios.get(`https://api.github.com/users/${gitUsername}`);
+        const gitData = gitResponse.data;
+        const gitName = gitData.login;
+        const gitEmail = gitData.email;
+        const gitlocation = gitData.location;
+        const gitUrl = gitData.html_url;
+        const gitProfileImage = gitData.avatar_url;
+            // contributor
+        const contributorUserNamesArray = contributorUserNames.split(",");
+        console.log(contributorUserNamesArray);
+        // const  = listOfContributorsUserNames.
+        // contributorsGitUserName
+        var resultContributor;
+        for (i=0; i<contributorUserNamesArray.length; i++){
+            var contributorsGitUserName = contributorUserNamesArray[i]
+            const gitResponse2 = await axios.get(`https://api.github.com/users/${contributorsGitUserName}`);
+            var gitContribuProfileImage = gitResponse2.data.avatar_url;
+            var gitContribuUrl = gitResponse2.data.html_url;
+            var gitContribuEmail = gitResponse2.data.email;
+            var resultContributor = resultContributor + (`
+            \n <img src="${gitContribuProfileImage}" alt="drawing" width="150" display="inline"/> ${contributorsGitUserName}  GitHubLink: ${gitContribuUrl}`);
+        }
+        
+function generateMarkdown(userResponse) {
   return `
 
-  # Project Title : ${data.title}
+# Project Title : ${userResponse.title}
 
 ## Project Description:
-${data.desc}
+${userResponse.desc}
 
 ## Table of Contents
 * [Title](#Title)
@@ -18,22 +55,22 @@ ${data.desc}
 * [Questions](#)
 
 ## Installation
-${data.install}
+${userResponse.install}
 
 ## Usage
-${data.usage}
+${userResponse.usage}
 
 ## License
-${data.licenseName} - ${data.licenseUrl}
+${userResponse.licenseName} - URL ${userResponse.licenseUrl}
 
 ## Contributors
-${data.contributors}
+${userResponse.contributors}
 
 ## Test
-${data.test}
+${userResponse.test}
 
 ## Questions
-If you have any questions, contact ${data.username} on GitHub.
+If you have any questions, contact ${userResponse.username} on GitHub.
 ## License
 MIT License
 Copyright (c) [year] [fullname]
@@ -53,9 +90,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ## Author 
-![GitHub profile pic](${data.image})
+![GitHub profile pic](${userResponse.image})
 
 `;
 }
 
 module.exports = generateMarkdown;
+
