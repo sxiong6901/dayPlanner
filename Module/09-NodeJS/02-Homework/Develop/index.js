@@ -61,7 +61,7 @@ async function main(){
         },
         {
             type: "input",
-            message: "please enter git hub user names of the contributor if any (If there are mulitple contributor, seperate names with comma and no space! )",
+            message: "Please enter the github user names of all contributors if applicable (Note: Separate name with commas and no spaces.)",
             name: "contributorsGitUserName"
         },
         {
@@ -106,33 +106,43 @@ async function main(){
             var resultContributor = resultContributor + (`
             \n <img src="${gitContribuProfileImage}" alt="drawing" width="150" display="inline"/> ${contributorsGitUserName}  GitHubLink: ${gitContribuUrl}`);
         }
-        var result = (`
-# ${projectTittle} 
+        var result = (
+`## ${projectTittle} 
 ${projectDescription}
-\n* [Installation](#Installation)
-\n* [Instructions](#Instructions)
-\n* [License](#License)
-\n* [Contributors](#Contributors)
-\n* [Questions](#Questions)
-\n* [Tests](#Tests)
+
+\n* Title (#Title)
+\n* Description (#Description)
+\n* Table of Contents (#tableOfContent)
+\n* Installation (#Installation)
+\n* Usage (#Usage)
+\n* License (#License)
+\n* Contributing (#Contributing)
+\n* Tests (#Tests)
+\n* Questions (#Questions)
+
+
 ## Installation
 ${tableOfContent}
 ${installationProcess}
+
 ## Instructions
 ${instruction}
+${tests}
 \`\`\`
 
 ## License 
-This project is licensed under the ${licenseName}
+This project is licensed under the ${licenseName} - ${licenseUrl}
+
 ## Contributors
 ${resultContributor}
+
 ## Tests
 ${tests}
+
 ## Questions 
 \n![ProfileImage](${gitProfileImage})
 \n**${gitName}**
 \nEmail: ${gitEmail}
-\nLocation:${gitlocation}
 \nGitHub: ${gitUrl}
 `)
 var writeResult = fs.writeFileSync(path.join(__dirname, '../GoodReadMeGenerator', 'readMe.md'), result )
