@@ -88,9 +88,12 @@ async function main(){
         const gitData = gitResponse.data;
         const gitName = gitData.login;
         const gitEmail = gitData.email;
-        const gitlocation = gitData.location;
         const gitUrl = gitData.html_url;
         const gitProfileImage = gitData.avatar_url;
+
+        //Table of Content
+        const TableOfContent = tableOfContent.split(",");
+        console.log(tableOfContent);
             // contributor
         const contributorUserNamesArray = contributorUserNames.split(",");
         console.log(contributorUserNamesArray);
@@ -110,6 +113,7 @@ async function main(){
 `## ${projectTittle} 
 ${projectDescription}
 
+${TableOfContent}
 \n* Title (#Title)
 \n* Description (#Description)
 \n* Table of Contents (#tableOfContent)
@@ -122,7 +126,7 @@ ${projectDescription}
 
 
 ## Installation
-${tableOfContent}
+
 ${installationProcess}
 
 ## Instructions
@@ -145,6 +149,7 @@ ${tests}
 \nEmail: ${gitEmail}
 \nGitHub: ${gitUrl}
 `)
+
 var writeResult = fs.writeFileSync(path.join(__dirname, '../GoodReadMeGenerator', 'readMe.md'), result )
 console.log("file generated....")
     }
