@@ -61,7 +61,6 @@ function generateMd(answer) {
   ## Description:
   ${answer.desc}
   ## Table of Contents
-  * [Title](#Title)
   * [Description](#Description)
   * [Installation](#Installation)
   * [Usage](#Usage)
@@ -77,7 +76,7 @@ function generateMd(answer) {
   ${answer.usage}
 
   ## License
-  ${answer.licenseName} - URL ${answer.licenseUrl}
+  ${answer.licenseName} - URL: ${answer.licenseUrl}
   
   ## Contributors
   https://github.com/+ ${answer.contributors}
@@ -88,10 +87,7 @@ function generateMd(answer) {
   ## Questions
   If you have any questions, contact ${answer.username} on GitHub.`
   }
-// fs.writeFile('README.md', generateMarkdown, function (err) {
-//     if (err) throw err;
-//     console.log('File is created successfully.');
-//   });
+
 promptUser()
 .then(function(answer) {
     const md = generateMd(answer);
